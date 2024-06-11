@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import { apiCheck } from '@/middleware/check'
 import { ApiDataRequest } from '@/types'
+
 const app = express()
 
 app.use(bodyParser.json())
