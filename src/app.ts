@@ -23,7 +23,14 @@ app.all('*', async (req: ApiDataRequest, res) => {
     const extraApiFunc = require(`@/api/extra/${apiName}`)
     extraApiFunc.default(req, res)
   } else {
-    const a = await prisma.article.findMany()
+    // @ts-ignore
+    const table = prisma[apiName]
+    if (!table) {
+    // const table = prisma.article
+      res.status(400).json({ message: 'Error Api Name' })
+      return
+    }
+    const a = await table.findMany()
     console.log(a)
     res.json({ data: 'hi' })
   }
