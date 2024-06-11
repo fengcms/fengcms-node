@@ -1,8 +1,11 @@
 import type { Response, NextFunction } from 'express'
 import { APP_BASE } from '@/config'
-import { parserApiNameAndID } from '@/utils/tools'
-import { ReqApiDataRequest, MethodType } from '@/types'
-export const apiCheck = (req: ReqApiDataRequest, res: Response, next: NextFunction) => {
+import { parserApiNameAndID, getTsFile } from '@/utils/tools'
+import { ApiDataRequest, MethodType } from '@/types'
+
+const extraAPI = getTsFile('../api/extra')
+console.log(extraAPI)
+export const apiCheck = (req: ApiDataRequest, res: Response, next: NextFunction) => {
   const { prefix } = APP_BASE
   const { originalUrl, method } = req
   // console.log(prefix, req.method, req.url, req.originalUrl, req.path, req.query, req.body)
@@ -28,8 +31,11 @@ export const apiCheck = (req: ReqApiDataRequest, res: Response, next: NextFuncti
     return
   }
 
-  req.reqApiData = {
-    apiName, id, method: !id && method === 'GET' ? 'ls' : method.toLocaleLowerCase() as MethodType
+  req.apiData = {
+    apiName,
+    id,
+    method: !id && method === 'GET' ? 'ls' : method.toLocaleLowerCase() as MethodType,
+    isExtraApi: extraAPI.includes(apiName)
   }
   console.log(apiName === '', id)
 

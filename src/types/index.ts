@@ -6,8 +6,9 @@ export interface ReqApiData {
   apiName: string
   id: string | number
   method: MethodType
+  isExtraApi: boolean
 }
 
-export interface ReqApiDataRequest extends Request {
-  reqApiData?: ReqApiData
+export interface ApiDataRequest extends Request {
+  apiData?: ReqApiData
 }
