@@ -1,7 +1,19 @@
 {
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "extends": [
     "standard",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
-  ]
+  ],
+  "rules": {
+    "space-before-function-paren": ["error", "always"],
+    "object-curly-spacing": ["error", "always"]
+  }
 }
