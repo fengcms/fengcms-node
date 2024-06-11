@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  title       String
+  channel_id  Int
+  description String
+  tags        String
+  content     String
+  markdown    String
+  img         String
+  video       String
+  author      String
+  origin      String
+  editor      String
+  user_id     Int
+  istop       Int       @default(0)
+  hits        Int       @default(0)
+  type        Int
+  status      Int
+  time        DateTime  @default(now())
+}
+  // Article: {
+  //   title: STRING, // 文章标题
+  //   channel_id: INTEGER, // 归属栏目ID
+  //   description: TEXT, // 文章描述
+  //   tags: TEXT, // 文章 Tag
+  //   content: TEXT, // 正文
+  //   markdown: TEXT, // markdown 格式正文
+  //   img: STRING, // 文章封面图片
+  //   video: STRING, // 文章封面图片
+  //   author: STRING, // 文章作者
+  //   origin: STRING, // 文章来源
+  //   editor: STRING, // 文章编辑
+  //   user_id: INTEGER, // 文章作者ID
+  //   istop: { type: INTEGER, defaultValue: 0 }, // 文章作者ID
+  //   hits: privateTypes.Hits, // 文章点击热度
+  //   type: privateTypes.Type, // 文章状态
+  //   status: privateTypes.Status, // 文章状态
+  //   time: privateTypes.Date
+  // },
