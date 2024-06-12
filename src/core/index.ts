@@ -12,8 +12,8 @@ const core = async (table: any, req: ApiDataRequest, res: Response) => {
   const { apiName, method, id } = req.apiData
   console.log(apiName, method, id)
   const params = method === 'ls' ? objKeyLower(req.query) : req.body
-  await query[method]({ apiName, params, id })
-  // res.json({ data: 'hi' })
+  const data = await query[method]({ table, apiName, params, id })
+  res.json({ data })
 }
 
 export default core

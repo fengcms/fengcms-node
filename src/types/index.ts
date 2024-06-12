@@ -14,6 +14,7 @@ export interface ApiDataRequest extends Request {
 }
 
 export interface CoreQueryParams {
+  table: any;
   apiName: string;
   params?: Record<string, any>
   id?: string | number | undefined
