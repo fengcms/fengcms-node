@@ -26,7 +26,6 @@ app.all('*', async (req: ApiDataRequest, res) => {
     // @ts-ignore
     const table = prisma[apiName]
     if (!table) {
-    // const table = prisma.article
       res.status(400).json({ message: 'Error Api Name' })
       return
     }

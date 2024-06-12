@@ -9,46 +9,199 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum STATUS {
+  NORMAL
+  PENDING
+  DELETE
+  FORBIDDEN
+}
+
+enum EDITOR {
+  RICHTEXT
+  MARKDOWN
+}
+
+enum GENDER {
+  MAN
+  WOMAN
 }
 
 model Article {
   id          Int      @id @default(autoincrement())
-  title       String
+  title       String   @db.VarChar(255)
   channel_id  Int
-  description String
-  tags        String
-  content     String
-  markdown    String
-  img         String
-  video       String
-  author      String
-  origin      String
-  editor      String
+  channel     Channel  @relation(fields: [channel_id], references: [id])
+  description String   @db.Text()
+  tags        String   @db.Text()
+  content     String   @db.LongText()
+  markdown    String   @db.LongText()
+  img         String   @db.VarChar(255)
+  video       String   @db.VarChar(255)
+  author      String   @db.VarChar(255)
+  origin      String   @db.VarChar(255)
+  editor      String   @db.VarChar(255)
   user_id     Int
-  istop       Int       @default(0)
-  hits        Int       @default(0)
-  type        Int
-  status      Int
-  time        DateTime  @default(now())
+  user        User     @relation(fields: [user_id], references: [id])
+  istop       Int      @default(0)
+  hits        Int      @default(0)
+  type        String   @db.VarChar(255)
+  status      STATUS   @default(NORMAL)
+  time        DateTime @db.Timestamp()
 }
-  // Article: {
-  //   title: STRING, // 文章标题
-  //   channel_id: INTEGER, // 归属栏目ID
-  //   description: TEXT, // 文章描述
-  //   tags: TEXT, // 文章 Tag
-  //   content: TEXT, // 正文
-  //   markdown: TEXT, // markdown 格式正文
-  //   img: STRING, // 文章封面图片
-  //   video: STRING, // 文章封面图片
-  //   author: STRING, // 文章作者
-  //   origin: STRING, // 文章来源
-  //   editor: STRING, // 文章编辑
-  //   user_id: INTEGER, // 文章作者ID
-  //   istop: { type: INTEGER, defaultValue: 0 }, // 文章作者ID
-  //   hits: privateTypes.Hits, // 文章点击热度
-  //   type: privateTypes.Type, // 文章状态
-  //   status: privateTypes.Status, // 文章状态
-  //   time: privateTypes.Date
-  // },
+
+// 系统日志表
+model Log {
+  id        Int      @id @default(autoincrement())
+  type      String   @db.VarChar(255) // 操作类型
+  role      String   @db.VarChar(255) // 操作角色
+  mark      String   @db.Text() // 备注 
+  user_id   Int // 操作人ID
+  user_name String   @db.VarChar(255) // 操作人姓名
+  time      DateTime @db.Timestamp()
+}
+
+model Single {
+  id       Int      @id @default(autoincrement())
+  title    String   @db.VarChar(255)
+  tags     String   @db.Text()
+  content  String   @db.LongText()
+  markdown String   @db.LongText()
+  hits     Int      @default(0)
+  status   STATUS   @default(NORMAL)
+  time     DateTime @db.Timestamp()
+}
+
+model Channel {
+  id          Int       @id @default(autoincrement())
+  pid         Int       @default(0) // 归属父ID
+  name        String    @db.VarChar(255) // 栏目名称
+  sort        Int       @default(0)
+  keywords    String    @db.Text()
+  description String    @db.Text()
+  status      STATUS    @default(NORMAL)
+  img         String    @db.VarChar(255)
+  website     String    @db.VarChar(255)
+  time        DateTime  @db.Timestamp()
+  Article     Article[]
+}
+
+// 超级管理员
+model Manages {
+  id       Int      @id @default(autoincrement())
+  account  String   @db.VarChar(255) // 超级管理员账号
+  password String   @db.VarChar(255) // 超级管理员密码
+  name     String   @db.VarChar(255) // 姓名
+  avatar   String   @db.VarChar(255) // 头像
+  mark     String   @db.Text()
+  editor   EDITOR   @default(RICHTEXT)
+  mobile   String   @db.VarChar(255)
+  email    String   @db.VarChar(255)
+  time     DateTime @db.Timestamp()
+}
+
+// 站点基本信息配置
+model Site {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255) // 站点名称
+  title       String   @db.VarChar(255) // 站点标题
+  logo        String   @db.VarChar(255) // 头像
+  keywords    String   @db.Text()
+  description String   @db.Text()
+  copyright   String   @db.Text()
+  time        DateTime @db.Timestamp()
+}
+
+// 作者
+model Author {
+  id      Int      @id @default(autoincrement())
+  name    String   @db.VarChar(255) // 姓名
+  avatar  String   @db.VarChar(255) // 头像
+  mark    String   @db.Text()
+  editor  EDITOR   @default(RICHTEXT)
+  mobile  String   @db.VarChar(255)
+  email   String   @db.VarChar(255)
+  website String   @db.VarChar(255)
+  time    DateTime @db.Timestamp()
+}
+
+// 来源
+model Origin {
+  id      Int      @id @default(autoincrement())
+  name    String   @db.VarChar(255) // 来源名称
+  logo    String   @db.VarChar(255) // 头像
+  contact String   @db.VarChar(255) // 联系人
+  mark    String   @db.Text()
+  mobile  String   @db.VarChar(255)
+  email   String   @db.VarChar(255)
+  website String   @db.VarChar(255)
+  time    DateTime @db.Timestamp()
+}
+
+// 文章编辑
+model Editor {
+  id       Int      @id @default(autoincrement())
+  account  String   @db.VarChar(255) // 超级管理员账号
+  password String   @db.VarChar(255) // 超级管理员密码
+  name     String   @db.VarChar(255) // 姓名
+  avatar   String   @db.VarChar(255) // 头像
+  mark     String   @db.Text()
+  editor   EDITOR   @default(RICHTEXT)
+  mobile   String   @db.VarChar(255)
+  email    String   @db.VarChar(255)
+  website  String   @db.VarChar(255)
+  time     DateTime @db.Timestamp()
+}
+
+// 会员表
+model User {
+  id        Int       @id @default(autoincrement())
+  account   String    @db.VarChar(255) // 超级管理员账号
+  password  String    @db.VarChar(255) // 超级管理员密码
+  name      String    @db.VarChar(255) // 姓名
+  avatar    String    @db.VarChar(255) // 头像
+  mark      String    @db.Text()
+  signature String    @db.Text()
+  gender    GENDER    @default(MAN)
+  editor    EDITOR    @default(RICHTEXT)
+  mobile    String    @db.VarChar(255)
+  email     String    @db.VarChar(255)
+  website   String    @db.VarChar(255)
+  status    STATUS    @default(PENDING)
+  time      DateTime  @db.Timestamp()
+  Article   Article[]
+}
+
+// 关键词
+model Tags {
+  id         Int      @id @default(autoincrement())
+  tags       String   @db.VarChar(255)
+  channel_id Int
+  hits       Int      @default(0)
+  time       DateTime @db.Timestamp()
+}
+
+// 广告系统
+model Show {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(255) // 姓名
+  mark   String   @db.Text()
+  link   String   @db.VarChar(255) // 姓名
+  img    String   @db.VarChar(255) // 头像
+  status STATUS   @default(PENDING)
+  time   DateTime @db.Timestamp()
+}
+
+// 友情链接
+model Links {
+  id   Int      @id @default(autoincrement())
+  name String   @db.VarChar(255) // 姓名
+  logo String   @db.VarChar(255) // 头像
+  link String   @db.VarChar(255) // 姓名
+  mark String   @db.Text()
+  sort Int      @default(0)
+  time DateTime @db.Timestamp()
+}
