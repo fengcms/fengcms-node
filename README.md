@@ -14,3 +14,5 @@ curl http://localhost:4888/api/v1/upload -F "file=@/Users/fungleo/Downloads/phot
 curl http://0.0.0.0:4888/api/v1/channel -X POST -H "Content-Type:application/json" -d '{"pid":0,"name":"test channel"}'
 curl http://0.0.0.0:4888/api/v1/user -X POST -H "Content-Type:application/json" -d '{"name":"FungLeo", "account": "fungleo", "password": "123456"}'
 curl http://0.0.0.0:4888/api/v1/article -X POST -H "Content-Type:application/json" -d '{"title":"text article title", "content": "test article content", "user_id": 1, "channel_id": 1}'
+
+curl http://0.0.0.0:4888/api/v1/channel/500 -X DELETE

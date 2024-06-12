@@ -32,7 +32,7 @@ app.all('*', async (req: ApiDataRequest, res) => {
       res.status(400).json({ message: 'Error Api Name' })
       return
     }
-    await core(table, req, res)
+    await core(prisma, table, req, res)
     // console.log(a)
     // res.json({ data: 'hi' })
   }
