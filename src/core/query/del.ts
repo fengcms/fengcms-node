@@ -1,20 +1,25 @@
-import { CoreQuery } from '@/types'
+import { CoreQuery, CoreQueryRequest } from '@/types'
 
-const del: CoreQuery = async ({ prisma, table, id }) => {
-  if (!id) return null
+const del: CoreQuery = async ({ prisma, table, apiName, id }): Promise<CoreQueryRequest> => {
+  const errRes = {
+    code: 400,
+    message: `Error ${apiName} id`
+  }
+  if (!id) return errRes
   const ids = id.split(',').map(val => Number(val))
   try {
-    const res = await table.deleteMany({
+    await table.deleteMany({
       where: {
         id: {
           in: ids
         }
       }
     })
-    await prisma.$disconnect()
-    return res
+    return { code: 200, data: true }
   } catch (error) {
-    return null
+    return errRes
+  } finally {
+    await prisma.$disconnect()
   }
 }
 

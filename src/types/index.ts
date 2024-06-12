@@ -21,5 +21,12 @@ export interface CoreQueryParams {
   params?: Record<string, any>
   id?: string
 }
+export interface CoreQueryRequest {
+  code: number
+  message?: string
+  data?: any
+}
 
-export type CoreQuery = (props: CoreQueryParams)=> Promise<any>
+export type CoreQuery = (props: CoreQueryParams)=> Promise<CoreQueryRequest>
+
+// export type

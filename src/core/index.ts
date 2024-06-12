@@ -11,13 +11,14 @@ const core = async (prisma: PrismaClient, table: any, req: ApiDataRequest, res: 
   }
 
   const { apiName, method, id } = req.apiData
-  console.log(apiName, method, id)
+  // console.log(apiName, method, id)
   const params = method === 'ls' ? objKeyLower(req.query) : req.body
-  const data = await query[method]({ prisma, table, apiName, params, id })
-  if (data) {
+  const { message, code, data } = await query[method]({ prisma, table, apiName, params, id })
+  if (code === 200) {
     res.json({ data })
   } else {
-    res.status(400).json({ message: 'Error' })
+    console.log(code, message)
+    res.status(code).json({ message, data })
   }
 }
 

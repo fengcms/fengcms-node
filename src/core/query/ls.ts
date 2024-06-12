@@ -1,6 +1,6 @@
-import { CoreQuery } from '@/types'
+import { CoreQuery, CoreQueryRequest } from '@/types'
 
-const ls: CoreQuery = async ({ table, apiName, id, params }) => {
+const ls: CoreQuery = async ({ table, apiName, id, params }): Promise<CoreQueryRequest> => {
   return await table.findMany()
   console.log(apiName, id, params)
 }
