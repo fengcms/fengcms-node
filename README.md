@@ -20,3 +20,5 @@ curl http://0.0.0.0:4888/api/v1/article -X POST -H "Content-Type:application/jso
 curl http://0.0.0.0:4888/api/v1/channel/500 -X DELETE
 
 curl http://0.0.0.0:4888/api/v1/channel/122 -X PUT -H "Content-Type:application/json" -d '{"name":"test channel2"}'
+
+curl http://0.0.0.0:4888/api/v1/channel\?page\=0\&pagesize\=5\&pid\=0
