@@ -78,3 +78,10 @@ export const moveFile = (sourcePath: string, targetPath: string) => {
     })
   })
 }
+
+// 对象键名转小写 （目前用于转化 url params 对象）
+export const objKeyLower = (o: Record<string, any>) => {
+  const res: Record<string, any> = {}
+  for (const i in o) res[i.toLocaleLowerCase()] = o[i]
+  return res
+}

@@ -4,7 +4,14 @@ import { parserApiNameAndID, getTsFile } from '@/utils/tools'
 import { ApiDataRequest, MethodType } from '@/types'
 
 const extraAPI = getTsFile('../api/extra')
-console.log(extraAPI)
+// console.log(extraAPI)
+
+const calcMethod = (id: any, method: string) => {
+  if (!id && method === 'GET') return 'ls'
+  if (method === 'DELETE') return 'del'
+  return method.toLocaleLowerCase()
+}
+
 export const apiCheck = (req: ApiDataRequest, res: Response, next: NextFunction) => {
   const { prefix } = APP_BASE
   const { originalUrl, method } = req
@@ -34,7 +41,7 @@ export const apiCheck = (req: ApiDataRequest, res: Response, next: NextFunction)
   req.apiData = {
     apiName,
     id,
-    method: !id && method === 'GET' ? 'ls' : method.toLocaleLowerCase() as MethodType,
+    method: calcMethod(id, method) as MethodType,
     isExtraApi: extraAPI.includes(apiName)
   }
   console.log(apiName === '', id)

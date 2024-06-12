@@ -1,6 +1,6 @@
 import type { Request } from 'express'
 
-export type MethodType = 'get' | 'post' | 'put' | 'delete' | 'ls'
+export type MethodType = 'get' | 'post' | 'put' | 'del' | 'ls'
 
 export interface ReqApiData {
   apiName: string
@@ -12,3 +12,11 @@ export interface ReqApiData {
 export interface ApiDataRequest extends Request {
   apiData?: ReqApiData
 }
+
+export interface CoreQueryParams {
+  apiName: string;
+  params?: Record<string, any>
+  id?: string | number | undefined
+}
+
+export type CoreQuery = (props: CoreQueryParams)=> Promise<any>

@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import { PrismaClient } from '@prisma/client'
 import { apiCheck } from '@/middleware/check'
 import { ApiDataRequest } from '@/types'
+import core from '@/core'
 
 const app = express()
 const prisma = new PrismaClient()
@@ -23,15 +24,17 @@ app.all('*', async (req: ApiDataRequest, res) => {
     const extraApiFunc = require(`@/api/extra/${apiName}`)
     extraApiFunc.default(req, res)
   } else {
+    // console.log(prisma.article)
+
     // @ts-ignore
-    const table = prisma[apiName]
+    const table = prisma[apiName] as any
     if (!table) {
       res.status(400).json({ message: 'Error Api Name' })
       return
     }
-    const a = await table.findMany()
-    console.log(a)
-    res.json({ data: 'hi' })
+    await core(table, req, res)
+    // console.log(a)
+    // res.json({ data: 'hi' })
   }
 })
 
