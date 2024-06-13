@@ -6,7 +6,9 @@ import { enums, models } from '@/model'
 import { makeDir } from '@/utils/tools'
 import { FieldTypes } from '@/types/modelBuild'
 
-export const configString = `// ./prisma/schema.prisma 文件为 Prisma 数据模型定义文件，在本系统中，是使用 TypeScript 生成的。
+const calcPrefix = () => {
+  const { type, username, password, host, prot, database } = DB_CONFIG
+  return `// ./prisma/schema.prisma 文件为 Prisma 数据模型定义文件，在本系统中，是使用 TypeScript 生成的。
 // 请勿直接修改该配置文件，如果需要调整数据模型，请修改 src/model.ts
 // 之后执行 npm run build:model 重新生成 schema.prisma 文件
 // 升级后请执行 npx prisma migrate dev 同步到数据库
@@ -16,13 +18,14 @@ generator client {
 }
 
 datasource db {
-  provider = "${DB_CONFIG.type}"
-  url      = "${DB_CONFIG.type}://${DB_CONFIG.username}:${DB_CONFIG.password}@${DB_CONFIG.host}:${DB_CONFIG.prot}/${DB_CONFIG.database}"
+  provider = "${type}"
+  url      = "${type}://${username}:${password}@${host}:${prot}/${database}"
 }
 
 `
+}
 
-export const calcEnums = () => {
+const calcEnums = () => {
   let res = ''
   Object.keys(enums).forEach(key => {
     let item = `enum ${key} {\n`
@@ -35,7 +38,7 @@ export const calcEnums = () => {
   return res
 }
 
-export const calcModelSpace = () => {
+const calcModelSpace = () => {
   const arr = flatten(Object.keys(models).map(key => {
     return Object.keys(models[key]).map(k => {
       return {
@@ -58,7 +61,7 @@ export const calcModelSpace = () => {
   }
 }
 
-export const calcModelField = (filedName: string, fileds: FieldTypes, filedSpace: string, typeSpace: string) => {
+const calcModelField = (filedName: string, fileds: FieldTypes, filedSpace: string, typeSpace: string) => {
   let res = '  '
   res += filedName + filedSpace.substring(0, filedSpace.length - filedName.length)
   res += fileds.type + (fileds.required ? '' : '?') + typeSpace.substring(0, typeSpace.length - fileds.type.length - (fileds.required ? 0 : 1))
@@ -67,7 +70,7 @@ export const calcModelField = (filedName: string, fileds: FieldTypes, filedSpace
   return res
 }
 
-export const calcModels = () => {
+const calcModels = () => {
   const { filedSpace, typeSpace } = calcModelSpace()
   // console.log(filedSpace, typeSpace)
   let res = ''
@@ -82,16 +85,15 @@ export const calcModels = () => {
   return res
 }
 
-const fileContent = `${configString}
+const fileContent = `${calcPrefix()}
 ${calcEnums()}
 ${calcModels()}
 `
 
 const main = async () => {
   const rootPath = process.cwd()
-  console.log(path.resolve(rootPath, './prisma'))
   await makeDir(path.resolve(rootPath, './prisma'))
-  fs.writeFile('./prisma/schema.prisma', fileContent, err => {
+  fs.writeFile(path.resolve(rootPath, './prisma/schema.prisma'), fileContent, err => {
     if (err) {
       console.error(
         new Error('Prisma 配置文件写入失败')
