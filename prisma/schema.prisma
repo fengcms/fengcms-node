@@ -165,7 +165,7 @@ model User {
   email           String?         @db.VarChar(255)
   website         String?         @db.VarChar(255)
   status          STATUS?         @default(PENDING)
-  time            DateTime?       @default(now())
+  time            DateTime        @default(now())
 }
 
 model Tags {

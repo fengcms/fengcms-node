@@ -2,6 +2,7 @@ import { CoreQuery, CoreQueryRequest } from '@/types'
 
 const post: CoreQuery = async ({ prisma, table, params }): Promise<CoreQueryRequest> => {
   try {
+    if (!params) return { code: 400, message: 'Error Data' }
     const data = await table.create({
       data: params
     })

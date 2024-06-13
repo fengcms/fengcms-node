@@ -489,7 +489,8 @@ export const models: Models = {
     },
     time: {
       type: 'DateTime',
-      modifiers: '@default(now())'
+      modifiers: '@default(now())',
+      required: true
     }
   },
   Tags: {

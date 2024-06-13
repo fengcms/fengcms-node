@@ -11,6 +11,7 @@ const ls: CoreQuery = async ({ table, params = {}, fields }): Promise<CoreQueryR
     return { code: 400, message: 'Error parameters, pagesize and page can only be Positive Integer' }
   }
   const condition: LsCondition = {
+    where: {},
     take: pageSize,
     skip: page * pageSize,
     orderBy: { id: 'desc' }
@@ -38,9 +39,30 @@ const ls: CoreQuery = async ({ table, params = {}, fields }): Promise<CoreQueryR
         return { code: 400, message: 'Error sort parameters' }
       }
     }
-    console.log(orderBy)
     condition.orderBy = orderBy
   }
+
+  // 处理时间参数
+  if (params.time) {
+    const timeArr = params.time.split('-')
+    const timeArrLen = timeArr.length
+    let st, et
+    if (timeArrLen > 2) return { code: 412, message: 'time参数有误' }
+    if (timeArr.filter((i: string) => !isInteger(Number(i))).length) return { code: 412, message: 'time参数只接受时间戳数字' }
+    if (timeArrLen === 1) {
+      const t = +timeArr[0]
+      st = t - t % 86400000
+      et = st + 86400000
+    } else {
+      st = +timeArr[0]
+      et = +timeArr[1]
+    }
+    condition.where.time = {
+      gte: new Date(st),
+      lte: new Date(et)
+    }
+  }
+
   console.log(condition)
 
   // console.log(apiName, params)

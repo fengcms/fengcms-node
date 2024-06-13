@@ -32,6 +32,7 @@ export type CoreQuery = (props: CoreQueryParams)=> Promise<CoreQueryRequest>
 
 export type OrderType = Record<string, 'asc' | 'desc'>
 export interface LsCondition {
+  where: Record<string, string | number | Record<string, any>>
   take?: number
   skip?: number
   orderBy?: OrderType
