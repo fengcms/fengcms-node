@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
+import { isNaN } from 'lodash'
 
 import { APP_BASE } from '@/config'
 
@@ -84,4 +85,10 @@ export const objKeyLower = (o: Record<string, any>) => {
   const res: Record<string, any> = {}
   for (const i in o) res[i.toLocaleLowerCase()] = o[i]
   return res
+}
+
+export const calcNumberString = (str: string): string | number => {
+  if (str === '') return ''
+  const num = Number(str)
+  return isNaN(num) ? str : num
 }
