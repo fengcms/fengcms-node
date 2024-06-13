@@ -18,6 +18,7 @@ export interface CoreQueryParams {
   prisma: PrismaClient
   table: any
   apiName: string
+  fields: string[]
   params?: Record<string, any>
   id?: string
 }
@@ -29,8 +30,9 @@ export interface CoreQueryRequest {
 
 export type CoreQuery = (props: CoreQueryParams)=> Promise<CoreQueryRequest>
 
+export type OrderType = Record<string, 'asc' | 'desc'>
 export interface LsCondition {
   take?: number
   skip?: number
-  orderBy?: Record<string, 'asc' | 'desc'>
+  orderBy?: OrderType
 }

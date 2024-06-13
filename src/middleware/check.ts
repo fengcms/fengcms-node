@@ -44,7 +44,7 @@ export const apiCheck = (req: ApiDataRequest, res: Response, next: NextFunction)
     method: calcMethod(id, method) as MethodType,
     isExtraApi: extraAPI.includes(apiName)
   }
-  console.log(apiName === '', id)
+  // console.log(apiName === '', id)
 
   next()
 }
