@@ -1,0 +1,207 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum STATUS {
+  NORMAL
+  PENDING
+  DELETE
+  FORBIDDEN
+}
+
+enum EDITOR {
+  RICHTEXT
+  MARKDOWN
+}
+
+enum GENDER {
+  MAN
+  WOMAN
+}
+
+model article {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  channel_id  Int
+  channel     channel   @relation(fields: [channel_id], references: [id])
+  description String?   @db.Text()
+  tags        String?   @db.Text()
+  content     String?   @db.LongText()
+  markdown    String?   @db.LongText()
+  img         String?   @db.VarChar(255)
+  video       String?   @db.VarChar(255)
+  author      String?   @db.VarChar(255)
+  origin      String?   @db.VarChar(255)
+  editor      String?   @db.VarChar(255)
+  user_id     Int?
+  user        user?     @relation(fields: [user_id], references: [id])
+  istop       Int       @default(0)
+  hits        Int       @default(0)
+  type        String?   @db.VarChar(255)
+  status      STATUS    @default(NORMAL)
+  time        DateTime  @default(now())
+}
+
+// 系统日志表
+model log {
+  id        Int          @id @default(autoincrement())
+  type      String       @db.VarChar(255) // 操作类型
+  role      String       @db.VarChar(255) // 操作角色
+  mark      String       @db.Text() // 备注 
+  user_id   Int // 操作人ID
+  user_name String       @db.VarChar(255) // 操作人姓名
+  time      DateTime     @default(now())
+}
+
+model single {
+  id       Int           @id @default(autoincrement())
+  title    String        @db.VarChar(255)
+  tags     String?       @db.Text()
+  content  String?       @db.LongText()
+  markdown String?       @db.LongText()
+  hits     Int           @default(0)
+  status   STATUS        @default(NORMAL)
+  time     DateTime      @default(now())
+}
+
+model channel {
+  id          Int         @id @default(autoincrement())
+  pid         Int         @default(0) // 归属父ID
+  name        String      @db.VarChar(255) // 栏目名称
+  sort        Int         @default(0)
+  keywords    String?     @db.Text()
+  description String?     @db.Text()
+  status      STATUS      @default(NORMAL)
+  img         String?     @db.VarChar(255)
+  website     String?     @db.VarChar(255)
+  time        DateTime    @default(now())
+  article     article[]
+}
+
+// 超级管理员
+model manages {
+  id       Int            @id @default(autoincrement())
+  account  String         @db.VarChar(255) // 超级管理员账号
+  password String         @db.VarChar(255) // 超级管理员密码
+  name     String?        @db.VarChar(255) // 姓名
+  avatar   String?        @db.VarChar(255) // 头像
+  mark     String?        @db.Text()
+  editor   EDITOR         @default(RICHTEXT)
+  mobile   String?        @db.VarChar(255)
+  email    String?        @db.VarChar(255)
+  time     DateTime       @default(now())
+}
+
+// 站点基本信息配置
+model site {
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(255) // 站点名称
+  title       String?     @db.VarChar(255) // 站点标题
+  logo        String?     @db.VarChar(255) // 头像
+  keywords    String?     @db.Text()
+  description String?     @db.Text()
+  copyright   String?     @db.Text()
+  time        DateTime    @default(now())
+}
+
+// 作者
+model author {
+  id      Int             @id @default(autoincrement())
+  name    String          @db.VarChar(255) // 姓名
+  avatar  String?         @db.VarChar(255) // 头像
+  mark    String?         @db.Text()
+  editor  EDITOR          @default(RICHTEXT)
+  mobile  String?         @db.VarChar(255)
+  email   String?         @db.VarChar(255)
+  website String?         @db.VarChar(255)
+  time    DateTime        @default(now())
+}
+
+// 来源
+model origin {
+  id      Int             @id @default(autoincrement())
+  name    String          @db.VarChar(255) // 来源名称
+  logo    String?         @db.VarChar(255) // 头像
+  contact String?         @db.VarChar(255) // 联系人
+  mark    String?         @db.Text()
+  mobile  String?         @db.VarChar(255)
+  email   String?         @db.VarChar(255)
+  website String?         @db.VarChar(255)
+  time    DateTime        @default(now())
+}
+
+// 文章编辑
+model editor {
+  id       Int            @id @default(autoincrement())
+  account  String         @db.VarChar(255) // 超级管理员账号
+  password String         @db.VarChar(255) // 超级管理员密码
+  name     String         @db.VarChar(255) // 姓名
+  avatar   String?        @db.VarChar(255) // 头像
+  mark     String?        @db.Text()
+  editor   EDITOR         @default(RICHTEXT)
+  mobile   String?        @db.VarChar(255)
+  email    String?        @db.VarChar(255)
+  website  String?        @db.VarChar(255)
+  time     DateTime       @default(now())
+}
+
+// 会员表
+model user {
+  id        Int           @id @default(autoincrement())
+  account   String        @db.VarChar(255) // 超级管理员账号
+  password  String        @db.VarChar(255) // 超级管理员密码
+  name      String        @db.VarChar(255) // 姓名
+  avatar    String?       @db.VarChar(255) // 头像
+  mark      String?       @db.Text()
+  signature String?       @db.Text()
+  gender    GENDER        @default(MAN)
+  editor    EDITOR        @default(RICHTEXT)
+  mobile    String?       @db.VarChar(255)
+  email     String?       @db.VarChar(255)
+  website   String?       @db.VarChar(255)
+  status    STATUS        @default(PENDING)
+  time      DateTime      @default(now())
+  article   article[]
+}
+
+// 关键词
+model tags {
+  id         Int          @id @default(autoincrement())
+  tags       String       @db.VarChar(255)
+  channel_id Int
+  hits       Int          @default(0)
+  time       DateTime     @default(now())
+}
+
+// 广告系统
+model show {
+  id     Int              @id @default(autoincrement())
+  name   String           @db.VarChar(255) // 姓名
+  mark   String?          @db.Text()
+  link   String           @db.VarChar(255) // 姓名
+  img    String?          @db.VarChar(255) // 头像
+  status STATUS           @default(PENDING)
+  time   DateTime         @default(now())
+}
+
+// 友情链接
+model links {
+  id   Int                @id @default(autoincrement())
+  name String             @db.VarChar(255) // 姓名
+  logo String?            @db.VarChar(255) // 头像
+  link String             @db.VarChar(255) // 姓名
+  mark String?            @db.Text()
+  sort Int                @default(0)
+  time DateTime           @default(now())
+}

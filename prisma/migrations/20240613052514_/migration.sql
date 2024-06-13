@@ -1,21 +1,21 @@
 -- CreateTable
-CREATE TABLE `Article` (
+CREATE TABLE `article` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
     `channel_id` INTEGER NOT NULL,
-    `description` TEXT NOT NULL,
-    `tags` TEXT NOT NULL,
-    `content` LONGTEXT NOT NULL,
-    `markdown` LONGTEXT NOT NULL,
-    `img` VARCHAR(255) NOT NULL,
-    `video` VARCHAR(255) NOT NULL,
-    `author` VARCHAR(255) NOT NULL,
-    `origin` VARCHAR(255) NOT NULL,
-    `editor` VARCHAR(255) NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `description` TEXT NULL,
+    `tags` TEXT NULL,
+    `content` LONGTEXT NULL,
+    `markdown` LONGTEXT NULL,
+    `img` VARCHAR(255) NULL,
+    `video` VARCHAR(255) NULL,
+    `author` VARCHAR(255) NULL,
+    `origin` VARCHAR(255) NULL,
+    `editor` VARCHAR(255) NULL,
+    `user_id` INTEGER NULL,
     `istop` INTEGER NOT NULL DEFAULT 0,
     `hits` INTEGER NOT NULL DEFAULT 0,
-    `type` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(255) NULL,
     `status` ENUM('NORMAL', 'PENDING', 'DELETE', 'FORBIDDEN') NOT NULL DEFAULT 'NORMAL',
     `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -23,7 +23,7 @@ CREATE TABLE `Article` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Log` (
+CREATE TABLE `log` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `type` VARCHAR(255) NOT NULL,
     `role` VARCHAR(255) NOT NULL,
@@ -36,12 +36,12 @@ CREATE TABLE `Log` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Single` (
+CREATE TABLE `single` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
-    `tags` TEXT NOT NULL,
-    `content` LONGTEXT NOT NULL,
-    `markdown` LONGTEXT NOT NULL,
+    `tags` TEXT NULL,
+    `content` LONGTEXT NULL,
+    `markdown` LONGTEXT NULL,
     `hits` INTEGER NOT NULL DEFAULT 0,
     `status` ENUM('NORMAL', 'PENDING', 'DELETE', 'FORBIDDEN') NOT NULL DEFAULT 'NORMAL',
     `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -50,7 +50,7 @@ CREATE TABLE `Single` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Channel` (
+CREATE TABLE `channel` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `pid` INTEGER NOT NULL DEFAULT 0,
     `name` VARCHAR(255) NOT NULL,
@@ -66,96 +66,96 @@ CREATE TABLE `Channel` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Manages` (
+CREATE TABLE `manages` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `account` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(255) NULL,
+    `avatar` VARCHAR(255) NULL,
+    `mark` TEXT NULL,
+    `editor` ENUM('RICHTEXT', 'MARKDOWN') NOT NULL DEFAULT 'RICHTEXT',
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `site` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `title` VARCHAR(255) NULL,
+    `logo` VARCHAR(255) NULL,
+    `keywords` TEXT NULL,
+    `description` TEXT NULL,
+    `copyright` TEXT NULL,
+    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `author` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `avatar` VARCHAR(255) NULL,
+    `mark` TEXT NULL,
+    `editor` ENUM('RICHTEXT', 'MARKDOWN') NOT NULL DEFAULT 'RICHTEXT',
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `website` VARCHAR(255) NULL,
+    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `origin` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `logo` VARCHAR(255) NULL,
+    `contact` VARCHAR(255) NULL,
+    `mark` TEXT NULL,
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `website` VARCHAR(255) NULL,
+    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `editor` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `account` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `avatar` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
+    `avatar` VARCHAR(255) NULL,
+    `mark` TEXT NULL,
     `editor` ENUM('RICHTEXT', 'MARKDOWN') NOT NULL DEFAULT 'RICHTEXT',
-    `mobile` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `website` VARCHAR(255) NULL,
     `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Site` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `title` VARCHAR(255) NOT NULL,
-    `logo` VARCHAR(255) NOT NULL,
-    `keywords` TEXT NOT NULL,
-    `description` TEXT NOT NULL,
-    `copyright` TEXT NOT NULL,
-    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Author` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `avatar` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
-    `editor` ENUM('RICHTEXT', 'MARKDOWN') NOT NULL DEFAULT 'RICHTEXT',
-    `mobile` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `website` VARCHAR(255) NOT NULL,
-    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Origin` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `logo` VARCHAR(255) NOT NULL,
-    `contact` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
-    `mobile` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `website` VARCHAR(255) NOT NULL,
-    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Editor` (
+CREATE TABLE `user` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `account` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `avatar` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
-    `editor` ENUM('RICHTEXT', 'MARKDOWN') NOT NULL DEFAULT 'RICHTEXT',
-    `mobile` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `website` VARCHAR(255) NOT NULL,
-    `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `User` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `account` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
-    `avatar` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
-    `signature` TEXT NOT NULL,
+    `avatar` VARCHAR(255) NULL,
+    `mark` TEXT NULL,
+    `signature` TEXT NULL,
     `gender` ENUM('MAN', 'WOMAN') NOT NULL DEFAULT 'MAN',
     `editor` ENUM('RICHTEXT', 'MARKDOWN') NOT NULL DEFAULT 'RICHTEXT',
-    `mobile` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `website` VARCHAR(255) NOT NULL,
+    `mobile` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NULL,
+    `website` VARCHAR(255) NULL,
     `status` ENUM('NORMAL', 'PENDING', 'DELETE', 'FORBIDDEN') NOT NULL DEFAULT 'PENDING',
     `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -163,7 +163,7 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Tags` (
+CREATE TABLE `tags` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `tags` VARCHAR(255) NOT NULL,
     `channel_id` INTEGER NOT NULL,
@@ -174,12 +174,12 @@ CREATE TABLE `Tags` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Show` (
+CREATE TABLE `show` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
+    `mark` TEXT NULL,
     `link` VARCHAR(255) NOT NULL,
-    `img` VARCHAR(255) NOT NULL,
+    `img` VARCHAR(255) NULL,
     `status` ENUM('NORMAL', 'PENDING', 'DELETE', 'FORBIDDEN') NOT NULL DEFAULT 'PENDING',
     `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -187,12 +187,12 @@ CREATE TABLE `Show` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Links` (
+CREATE TABLE `links` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `logo` VARCHAR(255) NOT NULL,
+    `logo` VARCHAR(255) NULL,
     `link` VARCHAR(255) NOT NULL,
-    `mark` TEXT NOT NULL,
+    `mark` TEXT NULL,
     `sort` INTEGER NOT NULL DEFAULT 0,
     `time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -200,7 +200,7 @@ CREATE TABLE `Links` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Article` ADD CONSTRAINT `Article_channel_id_fkey` FOREIGN KEY (`channel_id`) REFERENCES `Channel`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `article` ADD CONSTRAINT `article_channel_id_fkey` FOREIGN KEY (`channel_id`) REFERENCES `channel`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Article` ADD CONSTRAINT `Article_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `article` ADD CONSTRAINT `article_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

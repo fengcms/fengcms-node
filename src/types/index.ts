@@ -29,4 +29,8 @@ export interface CoreQueryRequest {
 
 export type CoreQuery = (props: CoreQueryParams)=> Promise<CoreQueryRequest>
 
-// export type
+export interface LsCondition {
+  take?: number
+  skip?: number
+  orderBy?: Record<string, 'asc' | 'desc'>
+}
