@@ -1,3 +1,6 @@
+// 由于系统使用了魔术方法，该配置文件是必不可少的。
+// 请先配置该文件，然后执行 npm run build:model 来生成 /prisma/schema.prisma 文件
+
 import { Models, EnumTypes } from '@/types/modelBuild'
 // 构建模型的 enum 类型配置
 export const enums: EnumTypes = {
@@ -10,7 +13,9 @@ export const enums: EnumTypes = {
   EDITOR: ['RICHTEXT', 'MARKDOWN'],
   GENDER: ['MAN', 'WOMAN']
 }
-
+// 构建模型数据结构，该代码为适用于 mysql 的装饰器配置。
+// 如果使用 postgresql ，需要修改 modifiers 的配置。
+// 参考官方网站： https://www.prisma.io/docs/orm/reference/prisma-schema-reference#model-field-scalar-types
 export const models: Models = {
   Article: {
     id: {

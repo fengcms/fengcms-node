@@ -26,7 +26,7 @@ datasource db {
 }
 
 const calcEnums = () => {
-  let res = ''
+  let res = '// 以下数据为 enums 枚举类型定义\n\n'
   Object.keys(enums).forEach(key => {
     let item = `enum ${key} {\n`
     enums[key].forEach((v: string) => {
@@ -56,28 +56,29 @@ const calcModelSpace = () => {
   }, {})
 
   return {
-    filedSpace: [...new Array(~~(filedLengthMax / 4) * 4 + 8)].map(() => ' ').join(''),
+    nameSpace: [...new Array(~~(filedLengthMax / 4) * 4 + 8)].map(() => ' ').join(''),
     typeSpace: [...new Array(~~(typeLengthMax / 4) * 4 + 8)].map(() => ' ').join('')
   }
 }
 
-const calcModelField = (filedName: string, fileds: FieldTypes, filedSpace: string, typeSpace: string) => {
+const calcModelField = (filedName: string, fileds: FieldTypes, nameSpace: string, typeSpace: string) => {
+  const nameSuffixSpace = nameSpace.substring(0, nameSpace.length - filedName.length)
+  const typeSuffixSpace = typeSpace.substring(0, typeSpace.length - fileds.type.length - (fileds.required ? 0 : 1))
   let res = '  '
-  res += filedName + filedSpace.substring(0, filedSpace.length - filedName.length)
-  res += fileds.type + (fileds.required ? '' : '?') + typeSpace.substring(0, typeSpace.length - fileds.type.length - (fileds.required ? 0 : 1))
-  res += fileds.modifiers || ''
+  res += filedName + nameSuffixSpace + fileds.type
+  res += (fileds.required ? '' : '?') + (fileds.modifiers ? (typeSuffixSpace + fileds.modifiers) : '')
   res += '\n'
   return res
 }
 
 const calcModels = () => {
-  const { filedSpace, typeSpace } = calcModelSpace()
-  // console.log(filedSpace, typeSpace)
-  let res = ''
+  const { nameSpace, typeSpace } = calcModelSpace()
+  // console.log(nameSpace, typeSpace)
+  let res = '// 以下数据为 models 数据模型定义\n\n'
   Object.keys(models).forEach(key => {
     let item = `model ${key} {\n`
     Object.keys(models[key]).forEach(k => {
-      item += calcModelField(k, models[key][k], filedSpace, typeSpace)
+      item += calcModelField(k, models[key][k], nameSpace, typeSpace)
     })
     item += '}\n\n'
     res += item

@@ -13,6 +13,8 @@ datasource db {
 }
 
 
+// 以下数据为 enums 枚举类型定义
+
 enum STATUS {
   NORMAL
   PENDING
@@ -31,10 +33,12 @@ enum GENDER {
 }
 
 
+// 以下数据为 models 数据模型定义
+
 model Article {
   id              Int             @id @default(autoincrement())
   title           String          @db.VarChar(255)
-  channel_id      Int             
+  channel_id      Int
   description     String?         @db.Text()
   tags            String?         @db.Text()
   content         String?         @db.LongText()
@@ -44,7 +48,7 @@ model Article {
   author          String?         @db.VarChar(255)
   origin          String?         @db.VarChar(255)
   editor          String?         @db.VarChar(255)
-  user_id         Int?            
+  user_id         Int?
   istop           Int             @default(0)
   hits            Int             @default(0)
   type            String?         @db.VarChar(255)
@@ -57,7 +61,7 @@ model Log {
   type            String          @db.VarChar(255)
   role            String          @db.VarChar(255)
   mark            String?         @db.Text()
-  user_id         Int             
+  user_id         Int
   time            DateTime        @default(now())
 }
 
@@ -167,7 +171,7 @@ model User {
 model Tags {
   id              Int             @id @default(autoincrement())
   tags            String          @db.VarChar(255)
-  channel_id      Int             
+  channel_id      Int
   hits            Int             @default(0)
   time            DateTime        @default(now())
 }
