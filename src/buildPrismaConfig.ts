@@ -22,7 +22,7 @@ datasource db {
 
 `
 
-export const calcMenus = () => {
+export const calcEnums = () => {
   let res = ''
   Object.keys(enums).forEach(key => {
     let item = `enum ${key} {\n`
@@ -83,7 +83,7 @@ export const calcModels = () => {
 }
 
 const fileContent = `${configString}
-${calcMenus()}
+${calcEnums()}
 ${calcModels()}
 `
 
