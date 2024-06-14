@@ -1,6 +1,6 @@
 import { CoreQuery, CoreQueryRequest } from '@/types'
 
-const get: CoreQuery = async ({ prisma, table, apiName, id }): Promise<CoreQueryRequest> => {
+const get: CoreQuery = async ({ table, apiName, id }): Promise<CoreQueryRequest> => {
   const data = await table.findUnique({
     where: {
       id: Number(id)
@@ -13,7 +13,6 @@ const get: CoreQuery = async ({ prisma, table, apiName, id }): Promise<CoreQuery
     data.time = new Date(data.time).getTime()
   }
 
-  prisma.$disconnect()
   return { code: 200, data }
 }
 

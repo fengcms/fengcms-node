@@ -4,9 +4,14 @@ import { PrismaClient } from '@prisma/client'
 import { apiCheck } from '@/middleware/check'
 import { ApiDataRequest } from '@/types'
 import core from '@/core'
+import { initModel } from '@/core/initModel'
 
 const app = express()
 const prisma = new PrismaClient()
+const models = initModel()
+
+global.prisma = prisma
+global.models = models
 
 app.use(bodyParser.json())
 app.use(apiCheck)
@@ -31,7 +36,7 @@ app.all('*', async (req: ApiDataRequest, res) => {
       res.status(400).json({ message: 'Error Api Name' })
       return
     }
-    await core(prisma, table, req, res)
+    await core(table, req, res)
     // console.log(a)
     // res.json({ data: 'hi' })
   }

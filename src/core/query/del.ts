@@ -1,6 +1,6 @@
 import { CoreQuery, CoreQueryRequest } from '@/types'
 
-const del: CoreQuery = async ({ prisma, table, apiName, id }): Promise<CoreQueryRequest> => {
+const del: CoreQuery = async ({ table, apiName, id }): Promise<CoreQueryRequest> => {
   const errRes = {
     code: 400,
     message: `Error ${apiName} id`
@@ -18,8 +18,6 @@ const del: CoreQuery = async ({ prisma, table, apiName, id }): Promise<CoreQuery
     return { code: 200, data: true }
   } catch (error) {
     return errRes
-  } finally {
-    await prisma.$disconnect()
   }
 }
 

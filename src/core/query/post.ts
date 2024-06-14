@@ -1,6 +1,6 @@
 import { CoreQuery, CoreQueryRequest } from '@/types'
 
-const post: CoreQuery = async ({ prisma, table, params }): Promise<CoreQueryRequest> => {
+const post: CoreQuery = async ({ table, params }): Promise<CoreQueryRequest> => {
   try {
     if (!params) return { code: 400, message: 'Error Data' }
     const data = await table.create({
@@ -9,8 +9,6 @@ const post: CoreQuery = async ({ prisma, table, params }): Promise<CoreQueryRequ
     return { data, code: 200 }
   } catch (error) {
     return { code: 400, message: 'Error Data' }
-  } finally {
-    prisma.$disconnect()
   }
 }
 

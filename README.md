@@ -23,6 +23,7 @@ curl http://0.0.0.0:4888/api/v1/channel/122 -X PUT -H "Content-Type:application/
 
 curl http://0.0.0.0:4888/api/v1/channel\?page\=0\&pagesize\=2\&pid\=0\&sort\=-id -s | jq
 
+curl http://0.0.0.0:4888/api/v1/channel\?page\=0\&pagesize\=2\&name-like\=aaa&pid-lt\=0&pid-gt\=0\&sort\=-id
 
 
 

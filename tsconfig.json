@@ -12,7 +12,8 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "glboal.d.ts"],
+  "files": ["glboal.d.ts"],
   "ts-node": {
     "esm": true
   }

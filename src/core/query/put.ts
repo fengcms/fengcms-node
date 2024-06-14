@@ -21,7 +21,7 @@ import { CoreQuery, CoreQueryRequest } from '@/types'
     每个数据里面必须包含 'id' 字段，否则参数错误
 */
 
-const put: CoreQuery = async ({ prisma, table, apiName, id, params }): Promise<CoreQueryRequest> => {
+const put: CoreQuery = async ({ table, apiName, id, params }): Promise<CoreQueryRequest> => {
   try {
     const res = await table.update({
       where: {
@@ -32,8 +32,6 @@ const put: CoreQuery = async ({ prisma, table, apiName, id, params }): Promise<C
     return { code: 200, data: res }
   } catch (error) {
     return { code: 400, message: `Error ${apiName} id or other params` }
-  } finally {
-    await prisma.$disconnect()
   }
 }
 

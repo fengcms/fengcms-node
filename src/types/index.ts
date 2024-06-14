@@ -1,5 +1,4 @@
 import type { Request } from 'express'
-import type { PrismaClient } from '@prisma/client'
 
 export type MethodType = 'get' | 'post' | 'put' | 'del' | 'ls'
 
@@ -15,7 +14,6 @@ export interface ApiDataRequest extends Request {
 }
 
 export interface CoreQueryParams {
-  prisma: PrismaClient
   table: any
   apiName: string
   fields: string[]
