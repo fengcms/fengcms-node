@@ -46,7 +46,8 @@ const argHandle: Record<string, (v: string)=> any> = {
   }
 }
 
-const ls: CoreQuery = async ({ table, params = {}, fields }): Promise<CoreQueryRequest> => {
+const ls: CoreQuery = async ({ table, params = {}, apiName }): Promise<CoreQueryRequest> => {
+  const fields = global.models[apiName]
   const pageSize = params?.pagesize ? Number(params.pagesize) : DEFAULT_PAGESIZE
   const page = params?.page ? Number(params.page) : 0
   // 校验分页参数是否正确
@@ -144,8 +145,18 @@ const ls: CoreQuery = async ({ table, params = {}, fields }): Promise<CoreQueryR
   // console.log(condition)
 
   // console.log(apiName, params)
-  const data = await table.findMany(condition)
-  return { code: 200, data }
+  const list = await table.findMany(condition)
+  const count = await table.count({ where: condition.where })
+  return {
+    code: 200,
+    data: {
+      page: Number(page),
+      list,
+      count,
+      // count: r.count,
+      pageSize
+    }
+  }
 }
 
 export default ls

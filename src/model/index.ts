@@ -229,6 +229,11 @@ export const models: Models = {
       modifiers: '@db.VarChar(255)',
       required: true
     },
+    salt: {
+      type: 'String',
+      modifiers: '@db.VarChar(255)',
+      required: true
+    },
     name: {
       type: 'String',
       modifiers: '@db.VarChar(255)'
@@ -396,6 +401,11 @@ export const models: Models = {
       modifiers: '@db.VarChar(255)',
       required: true
     },
+    salt: {
+      type: 'String',
+      modifiers: '@db.VarChar(255)',
+      required: true
+    },
     name: {
       type: 'String',
       modifiers: '@db.VarChar(255)'
@@ -443,6 +453,11 @@ export const models: Models = {
       required: true
     },
     password: {
+      type: 'String',
+      modifiers: '@db.VarChar(255)',
+      required: true
+    },
+    salt: {
       type: 'String',
       modifiers: '@db.VarChar(255)',
       required: true

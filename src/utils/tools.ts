@@ -5,6 +5,14 @@ import { isNaN } from 'lodash'
 
 import { APP_BASE } from '@/config'
 
+export const toType = (obj: any): string => {
+  // @ts-ignore
+  return {}.toString
+    .call(obj)
+    .match(/\s([a-zA-Z]+)/)[1]
+    .toLowerCase()
+}
+
 export const parserApiNameAndID = (originalUrl: string) => {
   const [apiName, id, errorUrl] = originalUrl.replace(APP_BASE.prefix, '').split('?')[0].split('/')
   return {
