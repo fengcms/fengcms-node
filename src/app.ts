@@ -1,18 +1,15 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { PrismaClient } from '@prisma/client'
 import { apiCheck } from '@/middleware/check'
 import { ApiDataRequest } from '@/types'
 import core from '@/core'
 import { initModel } from '@/core/initModel'
+import prisma from '@/model/prisma'
 
 const app = express()
-const prisma = new PrismaClient()
 const models = initModel()
 
-global.prisma = prisma
 global.models = models
-
 app.use(bodyParser.json())
 app.use(apiCheck)
 

@@ -1,3 +1,5 @@
+import path from 'path'
+
 export const APP_BASE = {
   host: '0.0.0.0',
   port: 4888,
@@ -18,3 +20,7 @@ export const DB_CONFIG = {
   // 数据库名称
   database: 'fengcms'
 }
+
+// 设置 RSA 秘钥文件配置
+export const RSA_PRIVATE_KEY_PATH = path.resolve(__dirname, './key/rsa_private_key.pem')
+export const RSA_PUBLIC_KEY_PATH = path.resolve(__dirname, './key/rsa_public_key.pem')

@@ -1,4 +1,6 @@
 import { toType } from '@/utils/tools'
+import { encrypt } from '@/utils/rsa'
+import prisma from '@/model/prisma'
 
 import ls from './ls'
 import get from './get'
@@ -7,7 +9,8 @@ import post from './post'
 import del from './del'
 
 export const getList = async (apiName: string, params = {}) => {
-  const table = global.prisma[apiName]
+  // @ts-ignore
+  const table = prisma[apiName]
   if (!table) return []
   const { data } = await ls({ table, params, apiName })
   return data ? data.list : []
@@ -23,7 +26,8 @@ export const getItem = async (apiName: string, params: any) => {
       return null
     }
   } else {
-    const table = global.prisma[apiName]
+    // @ts-ignore
+    const table = prisma[apiName]
     if (!table) return null
     const { data } = await get({ table, apiName, id: params })
     return data ?? null
@@ -40,47 +44,53 @@ export const postItem = async (apiName: string, params = {}) => {
 
 // 初始化空数据时添加默认数据方法
 export const initDb = async () => {
+  encrypt('123456')
+
   const hasManage = await getItem('manages', 'first')
+  console.log(22223333)
+  console.log(hasManage)
   // const password = await rsa.encrypt('123456')
-  if (!hasManage) {
-    postItem('manages', {
-      account: 'admin',
-      name: 'admin',
-      // password,
-      email: 'web@web.com',
-      mark: '系统初始管理员账号'
-    }).then(() => {
-      console.log('初始管理员账号添加完成 admin:123456')
-    })
-  }
-  const hasSite = await getItem('Site', 'first')
-  if (!hasSite) {
-    postItem('Site', {
-      name: 'RESTFul CMS koa By FungLeo',
-      title: 'RESTFul CMS koa By FungLeo',
-      keywords: 'RESTFul,CMS,koa',
-      copyright: 'By FungLeo'
-    }).then(() => {
-      console.log('初始系统信息数据完成')
-    })
-  }
-  const hasChan = await getItem('Channel', 'first')
-  if (!hasChan) {
-    const calcchannelMockDat = (pid: number, pre = '顶级') => {
-      return 'leo'.split('').map((i, index) => {
-        return { pid, name: `${pre}栏目${pid}${index}` }
-      })
-    }
-    const { ids } = await postItem('Channel', calcchannelMockDat(0))
-    ids.forEach(async (i: any) => {
-      const { ids } = await postItem('Channel', calcchannelMockDat(i, '二级'))
-      ids.forEach(async (i: any) => {
-        await postItem('Channel', calcchannelMockDat(i, '三级'))
-      })
-    })
-    console.log('初始测试栏目数据完成')
-  }
+  // if (!hasManage) {
+  //   postItem('manages', {
+  //     account: 'admin',
+  //     name: 'admin',
+  //     // password,
+  //     email: 'web@web.com',
+  //     mark: '系统初始管理员账号'
+  //   }).then(() => {
+  //     console.log('初始管理员账号添加完成 admin:123456')
+  //   })
+  // }
+  // const hasSite = await getItem('Site', 'first')
+  // if (!hasSite) {
+  //   postItem('Site', {
+  //     name: 'RESTFul CMS koa By FungLeo',
+  //     title: 'RESTFul CMS koa By FungLeo',
+  //     keywords: 'RESTFul,CMS,koa',
+  //     copyright: 'By FungLeo'
+  //   }).then(() => {
+  //     console.log('初始系统信息数据完成')
+  //   })
+  // }
+  // const hasChan = await getItem('Channel', 'first')
+  // if (!hasChan) {
+  //   const calcchannelMockDat = (pid: number, pre = '顶级') => {
+  //     return 'leo'.split('').map((i, index) => {
+  //       return { pid, name: `${pre}栏目${pid}${index}` }
+  //     })
+  //   }
+  //   const { ids } = await postItem('Channel', calcchannelMockDat(0))
+  //   ids.forEach(async (i: any) => {
+  //     const { ids } = await postItem('Channel', calcchannelMockDat(i, '二级'))
+  //     ids.forEach(async (i: any) => {
+  //       await postItem('Channel', calcchannelMockDat(i, '三级'))
+  //     })
+  //   })
+  //   console.log('初始测试栏目数据完成')
+  // }
 }
+
+initDb()
 
 const query = {
   ls, get, put, post, del
