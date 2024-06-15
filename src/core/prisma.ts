@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 let prismaInstance: PrismaClient | null = null
 
-function getPrismaClient (): PrismaClient {
+const getPrismaClient = (): PrismaClient => {
   if (!prismaInstance) {
     prismaInstance = new PrismaClient()
   }

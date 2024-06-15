@@ -2,6 +2,7 @@ import { isInteger } from 'lodash'
 import { DEFAULT_PAGESIZE } from '@/config'
 import { CoreQuery, CoreQueryRequest, LsCondition, OrderType } from '@/types'
 import { calcNumberString } from '@/utils/tools'
+import models from '@/core/model'
 
 // 从请求参数中找出非标准参数并输出为对象
 const getArgs = (params: Record<string, string>) => {
@@ -47,7 +48,7 @@ const argHandle: Record<string, (v: string)=> any> = {
 }
 
 const ls: CoreQuery = async ({ table, params = {}, apiName }): Promise<CoreQueryRequest> => {
-  const fields = global.models[apiName]
+  const fields = models[apiName]
   const pageSize = params?.pagesize ? Number(params.pagesize) : DEFAULT_PAGESIZE
   const page = params?.page ? Number(params.page) : 0
   // 校验分页参数是否正确

@@ -3,13 +3,10 @@ import bodyParser from 'body-parser'
 import { apiCheck } from '@/middleware/check'
 import { ApiDataRequest } from '@/types'
 import core from '@/core'
-import { initModel } from '@/core/initModel'
-import prisma from '@/model/prisma'
+import prisma from '@/core/prisma'
 
 const app = express()
-const models = initModel()
 
-global.models = models
 app.use(bodyParser.json())
 app.use(apiCheck)
 

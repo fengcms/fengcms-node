@@ -1,6 +1,6 @@
 import { toType } from '@/utils/tools'
 import { encrypt } from '@/utils/rsa'
-import prisma from '@/model/prisma'
+import prisma from '@/core/prisma'
 
 import ls from './ls'
 import get from './get'
@@ -36,7 +36,8 @@ export const getItem = async (apiName: string, params: any) => {
 
 // 系统内部添加新数据方法
 export const postItem = async (apiName: string, params = {}) => {
-  const table = global.prisma[apiName]
+  // @ts-ignore
+  const table = prisma[apiName]
   if (!table) return false
   const { data } = await post({ table, apiName, params })
   return data ?? false
