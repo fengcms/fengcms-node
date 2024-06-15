@@ -3,6 +3,7 @@
 ORM         Prisma
 
 
+```
 curl http://0.0.0.0:4888/api/v1/article?love\=1 -X POST -H "Content-Type:application/json" -d '{"title":"comewords","content":"articleContent"}'
 
 curl http://0.0.0.0:4888/api/v1/article/123?love\=1 -X POST
@@ -24,6 +25,23 @@ curl http://0.0.0.0:4888/api/v1/channel/122 -X PUT -H "Content-Type:application/
 curl http://0.0.0.0:4888/api/v1/channel\?page\=0\&pagesize\=2\&pid\=0\&sort\=-id -s | jq
 
 curl http://0.0.0.0:4888/api/v1/channel\?page\=0\&pagesize\=2\&name-like\=aaa&pid-lt\=0&pid-gt\=0\&sort\=-id
+
+
+curl http://0.0.0.0:4888/api/v1/Author/batch -X PUT -H "Content-Type:application/json" -d '[{"id": 1,"name":"fungleo1"},{"id": 2,"name":"fungleo2"},{"id": 3,"name":"fungleo3"}]'
+
+curl http://0.0.0.0:4888/api/v1/Author/batch -X PUT -H "Content-Type:application/json" -d '[{"id": 1,"name":"fungleo4"},{"id": 2,"name":"fungleo5"},{"id": 3,"name":"fungleo6"}]'
+
+curl http://0.0.0.0:4888/api/v1/Author/first -X PUT -H "Content-Type:application/json" -d '{"name":"fungleo","mark":"articleContent222","mobile": "13311122235"}'
+curl http://0.0.0.0:4888/api/v1/Author/batch -X PUT -H "Content-Type:application/json" -d '[{"name":"fungleo4"},{"id": 2,"name":"fungleo5"},{"id": 3,"name":"fungleo6"}]'
+
+curl http://0.0.0.0:4888/api/v1/Author -X POST -H "Content-Type:application/json" -d '[{"name":"fungleo","mark":"articleContent","mobile": "13311122233"},{"name":"fungleo","mark":"articleContent","mobile": "13311122233"},{"id": 1, "name":"fungleo","mark":"articleContent","mobile": "13311122233"}]'
+
+curl http://0.0.0.0:4888/api/v1/Author -X POST -H "Content-Type:application/json" -d '[{"name":"fungleo","mark":"articleContent","mobile": "13311122233"},{"name":"fungleo","mark":"articleContent","mobile": "13311122233"},{"name":"fungleo","mark":"articleContent","mobile": "13311122233"}]'
+
+curl http://0.0.0.0:4888/api/v1/Author/1,2,3,4,5 -X DELETE
+
+curl http://0.0.0.0:4888/api/v1/Author\?pageSize\=3\&page\=1\&mobile\=13311122233
+```
 
 
 
