@@ -10,9 +10,9 @@ const core = async (table: any, req: ApiDataRequest, res: Response) => {
   }
 
   const { apiName, method, id } = req.apiData
-  const params = method === 'ls' ? objKeyLower(req.query) : req.body
+  const params = method === 'ls' ? objKeyLower(req.query) : undefined
 
-  const { message, code, data } = await query[method]({ table, apiName, params, id })
+  const { message, code, data } = await query[method]({ table, apiName, params, id, data: req.body })
   if (code === 200) {
     res.send({ data })
   } else {

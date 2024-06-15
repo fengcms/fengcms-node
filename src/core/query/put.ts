@@ -21,13 +21,13 @@ import { CoreQuery, CoreQueryRequest } from '@/types'
     每个数据里面必须包含 'id' 字段，否则参数错误
 */
 
-const put: CoreQuery = async ({ table, apiName, id, params }): Promise<CoreQueryRequest> => {
+const put: CoreQuery = async ({ table, apiName, id, data }): Promise<CoreQueryRequest> => {
   try {
     const res = await table.update({
       where: {
         id: Number(id)
       },
-      data: params
+      data
     })
     return { code: 200, data: res }
   } catch (error) {

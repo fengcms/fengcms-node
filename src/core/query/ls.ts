@@ -47,12 +47,12 @@ const argHandle: Record<string, (v: string)=> any> = {
   }
 }
 
-const ls: CoreQuery = async ({ table, params = {}, apiName }): Promise<CoreQueryRequest> => {
+const ls: CoreQuery = async ({ table, params, apiName }): Promise<CoreQueryRequest> => {
   const fields = models[apiName]
   const pageSize = params?.pagesize ? Number(params.pagesize) : DEFAULT_PAGESIZE
   const page = params?.page ? Number(params.page) : 0
   // 校验分页参数是否正确
-  if (!isInteger(pageSize) || pageSize < 0 || !isInteger(page) || page < 0) {
+  if (!isInteger(pageSize) || pageSize < -1 || !isInteger(page) || page < 0) {
     return { code: 400, message: 'Error parameters, pagesize and page can only be Positive Integer' }
   }
   const condition: LsCondition = {

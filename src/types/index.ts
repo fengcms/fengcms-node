@@ -18,6 +18,7 @@ export interface CoreQueryParams {
   apiName: string
   params?: Record<string, any>
   id?: string
+  data?: Record<string, any> | Record<string, any>[]
 }
 export interface CoreQueryRequest {
   code: number

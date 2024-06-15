@@ -1,7 +1,10 @@
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
+import xss from 'xss'
 import { isNaN } from 'lodash'
+
+import { xssWhiteList } from '@/config/xssWhiteList'
 
 import { APP_BASE } from '@/config'
 
@@ -99,4 +102,9 @@ export const calcNumberString = (str: string): string | number => {
   if (str === '') return ''
   const num = Number(str)
   return isNaN(num) ? str : num
+}
+
+export const filterObjectXss = (o: Record<string, any>) => {
+  Object.keys(o).forEach(i => { o[i] = toType(o) === 'string' ? xss(o[i], { whiteList: xssWhiteList }) : o[i] })
+  return o
 }
