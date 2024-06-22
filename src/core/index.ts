@@ -18,6 +18,7 @@ const core = async (table: any, req: ApiDataRequest, res: Response) => {
   } else {
     console.log(code, message)
     res.status(code).json({ message, data })
+    return
   }
 }
 

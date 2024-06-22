@@ -10,7 +10,8 @@ export const encrypt = (str: string): Promise<string> => {
       if (err) reject(err)
       const publicK = forge.pki.publicKeyFromPem(data)
       const res = publicK.encrypt(str, 'RSA-OAEP')
-      resolve(res)
+      const Base64Res = forge.util.encode64(res)
+      resolve(Base64Res)
     })
   })
 }
@@ -21,7 +22,8 @@ export const decrypt = (str: string) => {
       if (err) reject(err)
       const privateK = forge.pki.privateKeyFromPem(data)
       try {
-        const res = privateK.decrypt(str, 'RSA-OAEP')
+        const base64Str = forge.util.decode64(str)
+        const res = privateK.decrypt(base64Str, 'RSA-OAEP')
         resolve(res)
       } catch (e) {
         reject(e)

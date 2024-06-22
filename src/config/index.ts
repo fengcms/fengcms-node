@@ -24,3 +24,6 @@ export const DB_CONFIG = {
 // 设置 RSA 秘钥文件配置
 export const RSA_PRIVATE_KEY_PATH = path.resolve(__dirname, './key/rsa_private_key.pem')
 export const RSA_PUBLIC_KEY_PATH = path.resolve(__dirname, './key/rsa_public_key.pem')
+
+export const JWT_SECRET = 'fengcms'
+export const JWT_EXPIRES_IN = '1d'

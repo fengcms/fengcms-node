@@ -13,15 +13,16 @@ export const getList = async (apiName: string, params = {}) => {
   const table = prisma[apiName]
   if (!table) return []
   const { data } = await ls({ table, params, apiName })
+  // console.log(1111, data)
   return data ? data.list : []
 }
 
 // 系统内部查询单条数据方法
 export const getItem = async (apiName: string, params: any) => {
   if (toType(params) === 'object') {
-    const { data } = await getList(apiName, params)
-    if (data.list.length) {
-      return data.list[0]
+    const data = await getList(apiName, params)
+    if (data) {
+      return data[0]
     } else {
       return null
     }
@@ -96,7 +97,11 @@ export const initDb = async () => {
 initDb()
 
 const query = {
-  ls, get, put, post, del
+  ls,
+  get,
+  put,
+  post,
+  del
 }
 
 export default query

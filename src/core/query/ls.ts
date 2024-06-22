@@ -14,40 +14,49 @@ const getArgs = (params: Record<string, string>) => {
 }
 
 // 非标配置项处理字典
-const argHandle: Record<string, (v: string)=> any> = {
-  like (arg: string) { // 模糊查询
+const argHandle: Record<string, (v: string) => any> = {
+  like(arg: string) {
+    // 模糊查询
     return { contains: arg }
   },
-  neq (arg: string) { // 不等查询
+  neq(arg: string) {
+    // 不等查询
     return { not: calcNumberString(arg) }
   },
-  gt (arg: string) { // 大于查询
+  gt(arg: string) {
+    // 大于查询
     return { gt: calcNumberString(arg) }
   },
-  gteq (arg: string) { // 大于等于查询
+  gteq(arg: string) {
+    // 大于等于查询
     return { gte: calcNumberString(arg) }
   },
-  lt (arg: string) { // 小于查询
+  lt(arg: string) {
+    // 小于查询
     return { lt: calcNumberString(arg) }
   },
-  lteq (arg: string) { // 小于等于查询
+  lteq(arg: string) {
+    // 小于等于查询
     return { lte: calcNumberString(arg) }
   },
-  in (arg: string) { // in 查询 （和 无 argConf 查询多条记录是一样的）
-    return { in: arg.split(',').map(i => calcNumberString(i)) }
+  in(arg: string) {
+    // in 查询 （和 无 argConf 查询多条记录是一样的）
+    return { in: arg.split(',').map((i) => calcNumberString(i)) }
   },
-  nin (arg: string) { // notIn 查询
-    return { notIn: arg.split(',').map(i => calcNumberString(i)) }
+  nin(arg: string) {
+    // notIn 查询
+    return { notIn: arg.split(',').map((i) => calcNumberString(i)) }
   },
-  nil () {
+  nil() {
     return null
   },
-  nnil () {
+  nnil() {
     return { equals: '' }
   }
 }
 
 const ls: CoreQuery = async ({ table, params, apiName }): Promise<CoreQueryRequest> => {
+  // console.log({ table, params, apiName })
   const fields = models[apiName]
   const pageSize = params?.pagesize ? Number(params.pagesize) : DEFAULT_PAGESIZE
   const page = params?.page ? Number(params.page) : 0
@@ -69,7 +78,7 @@ const ls: CoreQuery = async ({ table, params, apiName }): Promise<CoreQueryReque
   }
 
   // 处理排序
-  if (params.sort) {
+  if (params?.sort) {
     const sortArr = params.sort.split(',')
     const orderBy: OrderType = {}
     for (const i of sortArr) {
@@ -88,15 +97,16 @@ const ls: CoreQuery = async ({ table, params, apiName }): Promise<CoreQueryReque
   }
 
   // 处理时间参数
-  if (params.time) {
+  if (params?.time) {
     const timeArr = params.time.split('-')
     const timeArrLen = timeArr.length
     let st, et
     if (timeArrLen > 2) return { code: 412, message: 'time参数有误' }
-    if (timeArr.filter((i: string) => !isInteger(Number(i))).length) return { code: 412, message: 'time参数只接受时间戳数字' }
+    if (timeArr.filter((i: string) => !isInteger(Number(i))).length)
+      return { code: 412, message: 'time参数只接受时间戳数字' }
     if (timeArrLen === 1) {
       const t = +timeArr[0]
-      st = t - t % 86400000
+      st = t - (t % 86400000)
       et = st + 86400000
     } else {
       st = +timeArr[0]
@@ -108,7 +118,7 @@ const ls: CoreQuery = async ({ table, params, apiName }): Promise<CoreQueryReque
     }
   }
   // 处理非标参数
-  const args = getArgs(params)
+  const args = params ? getArgs(params) : {}
 
   for (const i in args) {
     const [fieldName, argConf, arrErr] = i.split('-')
@@ -133,10 +143,7 @@ const ls: CoreQuery = async ({ table, params, apiName }): Promise<CoreQueryReque
             若有，则追加 and 条件
             如 a-gt=10&a-lt=1&a-neq=5 这样的多重复核查询条件的支持
         */
-        condition.where[fieldName] =
-        condField
-          ? { ...condField, ...handleReq }
-          : handleReq
+        condition.where[fieldName] = condField ? { ...condField, ...handleReq } : handleReq
       } else {
         return { code: 412, message: i + '请求参数配置不被支持' }
       }
