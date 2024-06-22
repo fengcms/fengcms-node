@@ -53,10 +53,10 @@ const login = async (req: ApiDataRequest, res: Response) => {
   const token = createToken(role, account, dbUser.id)
   console.log(token)
   console.log(verifyToken(token))
-  // // 移除 cookies 设置功能
-  // // ctx.cookies.set('token', token, { httpOnly: true })
+  // cookies 设置
+  res.cookie('Authorization', token, { httpOnly: true })
   // ctx.body = succ({ token })
-  res.status(400).json({ message: 'Error File' })
+  res.json({ message: 'Successful Login' })
 }
 
 export default login
